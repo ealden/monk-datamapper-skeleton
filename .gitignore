@@ -5,5 +5,5 @@
 /db/redis/test
 /tmp
 /webrat.log
-/vendor/webrat/vendor
+/vendor/webrat*/vendor
 .sass-cache
