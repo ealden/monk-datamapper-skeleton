@@ -1,6 +1,26 @@
 class Monk < Thor
   include Thor::Actions
 
+  desc "migrate", "Migrate DataMapper"
+  def migrate(env = ENV['RACK_ENV'] || "development")
+    verify_config(env)
+
+    load "init.rb"
+    DataMapper.auto_migrate!
+
+    say_status :success, "Database migration completed!"
+  end
+
+  desc "upgrade", "Upgrade DataMapper"
+  def upgrade(env = ENV['RACK_ENV'] || "development")
+    verify_config(env)
+
+    load "init.rb"
+    DataMapper.auto_upgrade!
+
+    say_status :success, "Database upgrade completed!"
+  end
+
   desc "test", "Run all tests"
   def test
     verify_config(:test)
