@@ -21,6 +21,15 @@ class Monk < Thor
     say_status :success, "Database upgrade completed!"
   end
 
+  desc "populate", "Populate database"
+  def populate(env = ENV['RACK_ENV'] || "development")
+    verify_config(env)
+
+    Dir["data/datamapper/#{env}/*.rb"].each do |file|
+      load file unless file =~ /^-/
+    end
+  end
+
   desc "test", "Run all tests"
   def test
     verify_config(:test)
