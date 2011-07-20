@@ -25,9 +25,13 @@ class Monk < Thor
   def populate(env = ENV['RACK_ENV'] || "development")
     verify_config(env)
 
+    load "init.rb"
+
     Dir["data/datamapper/#{env}/*.rb"].each do |file|
       load file unless file =~ /^-/
     end
+
+    say_status :success, "Populate completed!"
   end
 
   desc "test", "Run all tests"
