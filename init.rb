@@ -12,6 +12,8 @@ require "monk/glue"
 require "haml"
 require "sass"
 require "data_mapper"
+require "spawn"
+require "faker"
 
 class Main < Monk::Glue
   set :app_file, __FILE__
