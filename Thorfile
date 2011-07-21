@@ -27,6 +27,10 @@ class Monk < Thor
 
     load "init.rb"
 
+    Dir["data/datamapper/common/*.rb"].each do |file|
+      load file unless file =~ /^-/
+    end
+
     Dir["data/datamapper/#{env}/*.rb"].each do |file|
       load file unless file =~ /^-/
     end
