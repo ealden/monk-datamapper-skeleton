@@ -4,6 +4,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "init"))
 
 require "test/unit"
 require "rack/test"
+require "contest"
 
 class Test::Unit::TestCase
   include Rack::Test::Methods
