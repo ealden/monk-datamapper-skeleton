@@ -6,6 +6,8 @@ class Monk < Thor
     verify_config(env)
 
     load "init.rb"
+    load_common_data
+
     DataMapper.auto_migrate!
 
     say_status :success, "Database migration completed!"
@@ -26,10 +28,7 @@ class Monk < Thor
     verify_config(env)
 
     load "init.rb"
-
-    Dir["data/datamapper/common/*.rb"].each do |file|
-      load file unless file =~ /^-/
-    end
+    load_common_data
 
     Dir["data/datamapper/#{env}/*.rb"].each do |file|
       load file unless file =~ /^-/
@@ -93,5 +92,11 @@ private
 
   def verify(example)
     copy_example(example) unless File.exists?(target_file_for(example))
+  end
+
+  def load_common_data
+    Dir["data/datamapper/common/*.rb"].each do |file|
+      load file unless file =~ /^-/
+    end
   end
 end
