@@ -4,9 +4,7 @@ class Monk < Thor
   desc "migrate", "Migrate DataMapper"
   def migrate(env = ENV['RACK_ENV'] || "development")
     verify_config(env)
-
-    load "init.rb"
-    load_common_data
+    load_init(env)
 
     DataMapper.auto_migrate!
 
@@ -16,8 +14,8 @@ class Monk < Thor
   desc "upgrade", "Upgrade DataMapper"
   def upgrade(env = ENV['RACK_ENV'] || "development")
     verify_config(env)
+    load_init(env)
 
-    load "init.rb"
     DataMapper.auto_upgrade!
 
     say_status :success, "Database upgrade completed!"
@@ -26,8 +24,8 @@ class Monk < Thor
   desc "populate", "Populate database"
   def populate(env = ENV['RACK_ENV'] || "development")
     verify_config(env)
+    load_init(env)
 
-    load "init.rb"
     load_common_data
 
     Dir["data/datamapper/#{env}/*.rb"].each do |file|
@@ -78,6 +76,15 @@ private
 
   def verify(example)
     copy_example(example) unless File.exists?(target_file_for(example))
+  end
+
+  def load_init(env)
+    old_env = ENV['RACK_ENV']
+    ENV['RACK_ENV'] = env
+
+    load "init.rb"
+
+    ENV['RACK_ENV'] = old_env
   end
 
   def load_common_data
