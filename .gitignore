@@ -3,3 +3,4 @@
 /webrat.log
 /vendor
 .sass-cache
+.DS_Store
