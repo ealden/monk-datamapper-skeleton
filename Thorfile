@@ -8,7 +8,7 @@ class Monk < Thor
 
     DataMapper.auto_migrate!
 
-    say_status :success, "Database migration completed!"
+    say_status :success, "Migrated database in #{env} environment"
   end
 
   desc "upgrade", "Upgrade DataMapper"
@@ -18,7 +18,7 @@ class Monk < Thor
 
     DataMapper.auto_upgrade!
 
-    say_status :success, "Database upgrade completed!"
+    say_status :success, "Upgraded database in #{env} environment"
   end
 
   desc "populate", "Populate database"
@@ -26,13 +26,10 @@ class Monk < Thor
     verify_config(env)
     load_init(env)
 
-    load_common_data
+    load_data("common/*.rb")
+    load_data("#{env}/*.rb")
 
-    Dir["data/datamapper/#{env}/*.rb"].each do |file|
-      load file unless file =~ /^-/
-    end
-
-    say_status :success, "Populate completed!"
+    say_status :success, "Populated database in #{env} environment"
   end
 
   desc "test", "Run all tests"
@@ -87,9 +84,12 @@ private
     ENV['RACK_ENV'] = old_env
   end
 
-  def load_common_data
-    Dir["data/datamapper/common/*.rb"].each do |file|
-      load file unless file =~ /^-/
+  def load_data(path)
+    Dir["data/datamapper/#{path}"].each do |file|
+      unless file =~ /^-/
+        load file
+        say_status :success, "Loaded data: #{file}"
+      end
     end
   end
 end
