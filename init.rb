@@ -20,13 +20,9 @@ class Main < Monk::Glue
   use Rack::Session::Cookie
 end
 
-host = monk_settings(:postgresql)[:host]
-port = monk_settings(:postgresql)[:port]
-username = monk_settings(:postgresql)[:username]
-password = monk_settings(:postgresql)[:password]
-database = monk_settings(:postgresql)[:database]
+db = monk_settings(:postgresql)
 
-DataMapper.setup(:default, "postgres://#{username}:#{password}@#{host}:#{port}/#{database}")
+DataMapper.setup(:default, "postgres://#{db[:username]}:#{db[:password]}@#{db[:host]}:#{db[:port]}/#{db[:database]}")
 
 # Load all application files.
 Dir[root_path("app/**/*.rb")].each do |file|
