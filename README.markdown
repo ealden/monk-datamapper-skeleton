@@ -10,3 +10,6 @@ Initializing a new Monk application with DataMapper:
 
     monk init myapp -s datamapper
 
+Once initialized, ensure that the following gems are installed:
+
+    gem install dependencies monk do_postgres
