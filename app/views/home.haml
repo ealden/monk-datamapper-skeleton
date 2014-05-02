@@ -12,7 +12,7 @@
 
     Check the configuration file at `config/settings.yml`. The keys under each environment can be accessed with the global `monk_settings` function, and you will also find an example in the default route.
 
-    DataMapper is connected to PostgreSQL via `#{@postgresql[:host]}:#{@postgresql[:port]}`. If you want to change it, make sure to edit `config/settings.yml`.
+    DataMapper is connected to PostgreSQL via `#{@configs[:adapter]}:#{@configs[:database]}`. If you want to change it, make sure to edit `config/settings.yml`.
 
     Testing
     -------

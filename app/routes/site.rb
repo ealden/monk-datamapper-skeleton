@@ -1,6 +1,6 @@
 class Main
   get "/" do
-    @postgresql = monk_settings(:postgresql)
+    @configs = monk_settings(:database)
     haml :home
   end
 end

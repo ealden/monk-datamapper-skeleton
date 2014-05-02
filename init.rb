@@ -1,6 +1,7 @@
 ROOT_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? ROOT_DIR
 
 require "rubygems"
+require 'sinatra'
 
 begin
   require File.expand_path("vendor/dependencies/lib/dependencies", File.dirname(__FILE__))
@@ -28,9 +29,19 @@ class Main < Monk::Glue
   use Rack::Session::Cookie
 end
 
-db = monk_settings(:postgresql)
+db = monk_settings(:database)
+configure :development do
+  DataMapper.setup(:default, "#{db[:adapter]}://#{Dir.pwd}//#{db[:database]}.db")
+end
 
-DataMapper.setup(:default, "postgres://#{db[:username]}:#{db[:password]}@#{db[:host]}:#{db[:port]}/#{db[:database]}")
+configure :test do
+  DataMapper.setup(:default, " #{db[:adapter]}://#{db[:username]}:#{db[:password]}@#{db[:host]}:#{db[:port]}/#{db[:database]}")
+end
+
+configure :production do
+  DataMapper.setup(:default, " #{db[:adapter]}://#{db[:username]}:#{db[:password]}@#{db[:host]}:#{db[:port]}/#{db[:database]}")
+end
+
 
 # Load all application files.
 Dir[root_path("app/**/*.rb")].each do |file|
